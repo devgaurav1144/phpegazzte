@@ -1,0 +1,146 @@
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Activity_Log extends MY_Controller {
+
+    /**
+     * __construct function.
+     */
+    public function __construct() {
+        parent::__construct();
+        $this->load->database();
+        $this->load->library(array('session', 'pagination', 'my_pagination'));
+        $this->load->helper(array('url', 'form', 'string', 'text', 'custom'));
+        $this->load->model(array('activity_log_model'));
+    }
+
+    public function index() {
+
+        if (!$this->session->userdata('logged_in') || !$this->session->userdata('is_admin')) {
+            if ($this->session->userdata('is_c&t') || $this->session->userdata('is_igr') || $this->session->userdata('is_applicant')) {
+                if ($this->session->userdata('is_c&t')) {
+                    $this->session->set_flashdata('error', 'You are not authorized! Please contact System Administrator to access the page.');
+                    redirect('commerce_transport_department/login_ct');
+                } else if ($this->session->userdata('is_igr')) {
+                    $this->session->set_flashdata('error', 'You are not authorized! Please contact System Administrator to access the page.');
+                    redirect('igr_user/login');
+                } else if ($this->session->userdata('is_applicant')) {
+                    $this->session->set_flashdata('error', 'You are not authorized! Please contact System Administrator to access the page.');
+                    redirect('applicants_login/index');
+                }
+            } else {
+                $this->session->set_flashdata('error', 'You are not authorized! Please contact System Administrator to access the page.');
+                redirect('user/login');
+            }
+            $this->session->set_flashdata('error', 'You are not authorized! Please contact System Administrator to access the page.');
+            redirect('user/login');
+        }
+        if (!$this->session->userdata('force_password')) {
+            $this->session->set_flashdata('error', 'You must change your password after first Login!');
+            redirect('user/change_password');
+        }
+        
+        $data['title'] = "Activity Log";
+
+        // Pagination Configuration
+        $config = array();
+        $config["base_url"] = base_url() . "activity_log/index";
+
+        $config["total_rows"] = $this->activity_log_model->get_total_activity_logs();
+
+        $config["per_page"] = 10;
+        $config["uri_segment"] = 3;
+        $config["num_links"] = 2;
+        $config['use_page_numbers'] = TRUE;
+
+        $config['full_tag_open'] = '<ul class="pagination pagination-primary">';
+        $config['full_tag_close'] = '</ul>';
+
+        $config['first_link'] = 'First';
+        $config['first_tag_open'] = '<li class="firstlink">';
+        $config['first_tag_close'] = '</li>';
+
+        $config['last_link'] = 'Last';
+        $config['last_tag_open'] = '<li class="lastlink">';
+        $config['last_tag_close'] = '</li>';
+
+        $config['next_link'] = 'Next';
+        $config['next_tag_open'] = '<li class="nextlink">';
+        $config['next_tag_close'] = '</li>';
+
+        $config['prev_link'] = 'Prev';
+        $config['prev_tag_open'] = '<li class="prevlink">';
+        $config['prev_tag_close'] = '</li>';
+
+        $config['cur_tag_open'] = '<li class="curlink active">';
+        $config['cur_tag_close'] = '</li>';
+
+        $config['num_tag_open'] = '<li class="numlink">';
+        $config['num_tag_close'] = '</li>';
+
+        $this->my_pagination->initialize($config);
+
+        $page = (int) ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+
+        if ($page > 0) {
+            $offset = ($page - 1) * $config["per_page"];
+        } else {
+            $offset = $page;
+        }
+
+        $data["links"] = $this->my_pagination->create_links();
+
+        $data['activities'] = $this->activity_log_model->get_activity_log_list($config['per_page'], $offset);
+
+        $this->load->view('template/header.php', $data);
+        $this->load->view('template/sidebar.php');
+        $this->load->view('activity_log/index.php', $data);
+        $this->load->view('template/footer.php');
+    }
+    
+
+    public function delete($id) {
+
+        if (!$this->session->userdata('logged_in') || !$this->session->userdata('is_admin')) {
+            if ($this->session->userdata('is_c&t') || $this->session->userdata('is_igr') || $this->session->userdata('is_applicant')) {
+                if ($this->session->userdata('is_c&t')) {
+                    $this->session->set_flashdata('error', 'You are not authorized! Please contact System Administrator to access the page.');
+                    redirect('commerce_transport_department/login_ct');
+                } else if ($this->session->userdata('is_igr')) {
+                    $this->session->set_flashdata('error', 'You are not authorized! Please contact System Administrator to access the page.');
+                    redirect('igr_user/login');
+                } else if ($this->session->userdata('is_applicant')) {
+                    $this->session->set_flashdata('error', 'You are not authorized! Please contact System Administrator to access the page.');
+                    redirect('applicants_login/index');
+                }
+            } else {
+                $this->session->set_flashdata('error', 'You are not authorized! Please contact System Administrator to access the page.');
+                redirect('user/login');
+            }
+            $this->session->set_flashdata('error', 'You are not authorized! Please contact System Administrator to access the page.');
+            redirect('user/login');
+        }
+
+        if (!is_numeric($id) || !$this->department_model->exists($id)) {
+            $this->session->set_flashdata('error', 'Department does not exists');
+            redirect('department/index');
+        }
+
+        if ($this->department_model->linked_with_user($id)) {
+            $this->session->set_flashdata('error', 'Department associated with nodal officer. Cannot be deleted');
+            redirect('department/index');
+        }
+
+        if ($this->department_model->delete($id)) {
+            $this->session->set_flashdata('success', 'Department deleted successfully');
+            redirect('department/index');
+        } else {
+            $this->session->set_flashdata('error', 'Department not deleted');
+            redirect('department/index');
+        }
+    }
+
+}
+
+?>

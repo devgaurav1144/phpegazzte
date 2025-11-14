@@ -1,0 +1,276 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+	<meta name="twitter:widgets:csp" content="on">
+		<!--<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; connect-src 'self' blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self';" />-->
+        <title>:: E-Gazette - <?php echo (isset($title)) ? $title: 'Dashboard' ;?> ::</title>
+        <link rel="icon" type="image/ico" href="<?php echo base_url(); ?>assets/images/favicon.ico" />
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- vendor css files -->
+        <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/vendor/bootstrap/bootstrap.min.css">    
+        <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/vendor/animsition.min.css">
+        <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/vendor/morris/morris.css">    
+        <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/vendor/datetimepicker/css/bootstrap-datetimepicker.min.css">
+<!--        <link rel="stylesheet" href="http://blueimp.github.io/Gallery/css/blueimp-gallery.min.css">-->
+        <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/vendor/file-upload/css/jquery.fileupload.css">
+        <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/vendor/file-upload/css/jquery.fileupload-ui.css">
+<!--        <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/vendor/file-upload/css/jquery.fileupload-ui.css">-->
+        <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/vendor/jquery-ui/jquery-ui.min.css">
+        <noscript>
+        <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/vendor/file-upload/css/jquery.fileupload-ui-noscript.css">
+        </noscript>
+        <!-- project main css files -->
+        <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/main.css" nonce="8f0882ce3be14f201cadd0eff5726cbd">
+        <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/style.css" nonce="8f0882ce3be14f201cadd0eff5726cbd">
+        <style nonce="8f0882ce3be14f201cadd0eff5726cbd">
+           .department_header_text{
+               padding:0 !important;
+            } 
+            .date_size{
+                text-align: right;
+                font-size: 12px;
+            }
+            .media-body{
+                padding-right: 0px !important;;
+            }
+        </style>
+    </head>
+    <body id="falcon" class="main_Wrapper">
+        <div id="wrap" class="animsition">
+            <!-- HEADER Content -->
+            <div id="header">
+                <header class="clearfix">
+                    <!-- Branding -->
+                    <div class="branding">
+                        <a class="brand" href="<?php echo base_url(); ?>applicants_login/dashboard">
+                            <span><img class="inner_logo" src="<?php echo base_url(); ?>assets/images/logo1.png" width="150" height="100"/></span>
+                        </a>
+                        <a role="button" tabindex="0" class="offcanvas-toggle visible-xs-inline">
+                            <i class="fa fa-bars"></i>
+                        </a>
+                    </div>
+                    <!-- Branding end -->
+                    <!-- Left-side navigation -->
+                    <ul class="nav-left pull-left list-unstyled list-inline">
+                        <li class="leftmenu-collapse">
+                            <a role="button" tabindex="0" class="collapse-leftmenu">
+                                <i class="fa fa-outdent"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <?php 
+                        $CI =& get_instance();
+                        $CI->load->model(array('notification_model'));
+                        // $CI->load->helper(array('custom', 'text'));
+                    ?>
+                    <!-- Left-side navigation -->
+                    <div class="department_header_text">
+                        <?php if ($this->session->userdata('is_applicant')) { ?>
+                            <?php echo $this->session->userdata('name') ?> (Applicant)
+                        <?php } else if ($this->session->userdata('is_igr')) { ?>
+                            <?php echo $this->session->userdata('name'); ?> , IGR (<?php echo $this->session->userdata('is_verifier_approver'); ?>)
+                        <?php } else if ($this->session->userdata('is_c&t')) { ?>
+                            <?php echo $this->session->userdata('name'); ?> , C&T (<?php echo $this->session->userdata('is_verifier_approver'); ?>)
+                        <?php } ?>
+                    </div>
+                    <!-- Right-side navigation -->
+                    <ul class="nav-right pull-right list-inline">
+                        <?php
+                            if ($this->session->userdata('is_applicant')) {
+                                $notifications = $CI->notification_model->get_applicant_notifications_latest($this->session->userdata('user_id'));
+                            } else if ($this->session->userdata('is_igr')) {
+                                $notifications = $CI->notification_model->get_igr_notifications_latest($this->session->userdata('is_verifier_approver'));
+                            } else if ($this->session->userdata('is_c&t')) {
+                                $notifications = $CI->notification_model->get_cnt_notifications_latest($this->session->userdata('is_verifier_approver'));
+                            }
+                            // echo "<pre>";
+                            // print_r($notifications);
+                            // echo "</pre>";
+
+                        ?>
+                        <li class="manual">
+                            <?php if ($this->session->userdata('is_c&t')) { ?>
+                                <a href="<?php echo base_url(); ?>manual/public/cnt_manual.pdf" target="_blank">User Manual</a>
+                            <?php } ?>
+                            <?php if ($this->session->userdata('is_igr')) { ?>
+                                <a href="<?php echo base_url(); ?>manual/public/igr_manual.pdf" target="_blank">User Manual</a>
+                            <?php } ?>
+                            <?php if ($this->session->userdata('is_applicant')) { ?>
+                                <a href="<?php echo base_url(); ?>manual/public/manual.pdf" target="_blank">User Manual</a>
+                            <?php } ?>
+                        </li>
+                        <li class="dropdown notifications">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-bell"></i>
+                                <?php if (!empty($notifications)) { ?>
+                                    <div class="notify">
+                                        <span class="heartbit"></span>
+                                        <span class="point"></span>
+                                    </div>
+                                <?php } ?>
+                            </a>
+                            <div class="dropdown-menu pull-right panel panel-default">
+                                <?php if (!empty($notifications)) { ?>
+                                    <ul class="list-group">
+                                        <?php foreach ($notifications as $notif) { ?>
+                                            <li class="list-group-item">
+                                                <?php if ($this->session->userdata('is_applicant')) { ?>
+                                                    <?php if($notif->module_id == 1) {?>
+                                                    <a href="<?php echo base_url() . 'check_status/change_partnership_status_details/' . $notif->master_id; ?>" role="button" tabindex="0" class="media notif_click" id="<?php echo $notif->id; ?>">
+                                                        <input type="hidden" name="master_id" class="master_id_val" value="<?php echo $notif->id; ?>"/>
+                                                        <div class="media-body">
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 date_size">
+                                                                <small class="text-muted"><?php echo get_formatted_datetime($notif->created_at); ?></small>
+                                                            </div>
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <span class="block"><?php echo $notif->text; ?></span>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                    <?php } else {?>
+                                                        <a href="<?php echo base_url() . 'check_status/change_name_status_details/' . $notif->master_id; ?>" role="button" tabindex="0" class="media notif_click" id="<?php echo $notif->id; ?>">
+                                                        <input type="hidden" name="master_id" class="master_id_val" value="<?php echo $notif->id; ?>"/>
+                                                        <div class="media-body">
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 date_size">
+                                                                <small class="text-muted"><?php echo get_formatted_datetime($notif->created_at); ?></small>
+                                                            </div>
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <span class="block"><?php echo $notif->text; ?></span>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                    <?php }?>
+                                                <?php } else if ($this->session->userdata('is_c&t')) { ?>
+                                                    <?php if($notif->module_id == 1) {?>
+                                                    <a href="<?php echo base_url() . 'applicants_login/edit_partnership_details/' . $notif->master_id; ?>" role="button" tabindex="0" class="media cnt_read" data-view_id="<?php echo $notif->id; ?>">
+                                                        <input type="hidden" name="master_id" class="master_id_val" value="<?php echo $notif->master_id; ?>"/>
+                                                        <div class="media-body">
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 date_size">
+                                                                <small class="text-muted"><?php echo get_formatted_datetime($notif->created_at); ?></small>
+                                                            </div>
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <span class="block"><?php echo $notif->text; ?></span>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                    <?php } else if($notif->module_id == 2){ ?>
+                                                        <a href="<?php echo base_url() . 'applicants_login/view_details_name_surname/' . $notif->master_id; ?>" role="button" tabindex="0" class="media cnt_read" data-view_id="<?php echo $notif->id; ?>">
+                                                            <input type="hidden" name="master_id" class="master_id_val" value="<?php echo $notif->master_id; ?>"/>
+                                                            <div class="media-body">
+                                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 date_size">
+                                                                    <small class="text-muted"><?php echo get_formatted_datetime($notif->created_at); ?></small>
+                                                                </div>
+                                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                    <span class="block"><?php echo $notif->text; ?></span>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    <?php } else if($notif->module_id == 3) { ?>
+                                                        <a href="<?php echo base_url() . 'extraordinary_poc/view/' . $notif->master_id; ?>" role="button" tabindex="0" class="media cnt_read" data-view_id="<?php echo $notif->id; ?>">
+                                                        <input type="hidden" name="master_id" class="master_id_val" value="<?php echo $notif->master_id; ?>"/>
+                                                        <div class="media-body">
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 date_size">
+                                                                <small class="text-muted"><?php echo get_formatted_datetime($notif->created_at); ?></small>
+                                                            </div>
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <span class="block"><?php echo $notif->text; ?></span>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                    <?php } else { ?>
+                                                        <a href="<?php echo base_url() . 'applicants_login/view_details_name_surname/' . $notif->master_id; ?>" role="button" tabindex="0" class="media cnt_read" data-view_id="<?php echo $notif->id; ?>">
+                                                        <input type="hidden" name="master_id" class="master_id_val" value="<?php echo $notif->master_id; ?>"/>
+                                                        <div class="media-body">
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 date_size">
+                                                                <small class="text-muted"><?php echo get_formatted_datetime($notif->created_at); ?></small>
+                                                            </div>
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <span class="block"><?php echo $notif->text; ?></span>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                    <?php } ?>
+                                                <?php } else if($this->session->userdata('is_igr')){ ?>
+                                                    <a href="<?php echo base_url() . 'applicants_login/edit_partnership_details/' . $notif->master_id; ?>" role="button" tabindex="0" class="media igr_read" data-view_id="<?php echo $notif->id; ?>">
+                                                        <input type="hidden" name="master_id" class="master_id_val" value="<?php echo $notif->master_id; ?>"/>
+                                                        <div class="media-body">
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 date_size">
+                                                                <small class="text-muted"><?php echo get_formatted_datetime($notif->created_at); ?></small>
+                                                            </div>
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <span class="block"><?php echo $notif->text; ?></span>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                <?php }?>
+                                            </li>
+                                        <?php } ?>
+                                    </ul>
+                                    <div class="panel-footer">
+                                        <a href="<?php echo base_url(); ?>notification/all_notification" role="button" tabindex="0">Show all notifications
+                                            <i class="fa fa-angle-right pull-right"></i>
+                                        </a>
+                                    </div>
+                                <?php } else { ?>
+                                    <div class="panel-footer">
+                                        <a role="button" tabindex="0">No Notifications
+                                        </a>
+                                    </div>
+                                <?php } ?>
+                            </div>
+                        </li>
+                        <li class="dropdown nav-profile">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="<?php echo base_url(); ?>assets/images/user-profile.png" alt="" class="0 size-30x30"> </a>
+                            <ul class="dropdown-menu pull-right" role="menu">
+                                <li>
+                                    <div class="user-info">
+                                        <div class="user-name"><?php echo $this->session->userdata('name'); ?></div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>" role="button" tabindex="0" target="_blank">
+                                        <i class="fa fa-globe"></i>Visit Website</a>
+                                </li>
+                                <li>
+                                    <?php if ($this->session->userdata('is_applicant')) { ?>
+                                        <a href="<?php echo base_url(); ?>applicants_login/profile" role="button" tabindex="0"><i class="fa fa-user"></i>Profile</a>
+                                    <?php } else if ($this->session->userdata('is_igr')) { ?>
+                                        <a href="<?php echo base_url(); ?>igr_user/profile" role="button" tabindex="0"><i class="fa fa-user"></i>Profile</a>
+                                    <?php } else if ($this->session->userdata('is_c&t')) { ?>
+                                         <a href="<?php echo base_url(); ?>commerce_transport_department/profile" role="button" tabindex="0"><i class="fa fa-user"></i>Profile</a>
+                                    <?php } ?>
+                                </li>
+                                <li>
+                                    <?php if ($this->session->userdata('is_applicant')) { ?>
+                                        <a href="<?php echo base_url(); ?>applicants_login/change_password" role="button" tabindex="0"><i class="fa fa-lock"></i>Change Password</a>
+                                    <?php } else if ($this->session->userdata('is_igr')) { ?>
+                                        <a href="<?php echo base_url(); ?>igr_user/change_password" role="button" tabindex="0"><i class="fa fa-lock"></i>Change Password</a>
+                                    <?php } else if ($this->session->userdata('is_c&t')) { ?>
+                                         <a href="<?php echo base_url(); ?>commerce_transport_department/change_password" role="button" tabindex="0"><i class="fa fa-user"></i>Change Password</a>
+                                    <?php } ?>
+                                    
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <?php if ($this->session->userdata('is_applicant')) { ?>
+                                        <a href="<?php echo base_url(); ?>applicants_login/logout" role="button" tabindex="0"><i class="fa fa-sign-out"></i>Logout</a>
+                                    <?php } else if ($this->session->userdata('is_igr')) { ?>
+                                        <a href="<?php echo base_url(); ?>igr_user/logout" role="button" tabindex="0"><i class="fa fa-sign-out"></i>Logout</a>
+                                    <?php } else if ($this->session->userdata('is_c&t')) { ?>
+                                        <a href="<?php echo base_url(); ?>commerce_transport_department/logout" role="button" tabindex="0"><i class="fa fa-sign-out"></i>Logout</a>
+                                    <?php } ?>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <!-- Right-side navigation -->
+                </header>
+            </div>
+            <!-- /HEADER Content -->
+        <!--</div>-->
+    <!--</body>-->
+<!--</html>-->

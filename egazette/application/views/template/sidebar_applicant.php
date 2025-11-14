@@ -1,0 +1,460 @@
+<div id="controls">
+    <aside id="leftmenu">
+        <div id="leftmenu-wrap">
+            <div class="panel-group slim-scroll" role="tablist">
+                <div class="panel panel-default">
+                    <div id="leftmenuNav" class="panel-collapse collapse in" role="tabpanel">
+                        <div class="panel-body">
+                            <!--  NAVIGATION Content -->
+                            <?php //echo '<pre>'; print_r($this->session->userdata()); ?>
+                            
+                            <!--APPLICANT SIDEBAR-->
+                            
+                            <?php if ($this->session->userdata('is_applicant')) { ?>
+                            
+                                <ul id="navigation">
+                                    
+                                    <?php 
+                                        if ($this->uri->segment(2) == "dashboard") { 
+                                            $class = "active open";
+                                        } else {
+                                            $class = "";
+                                        }
+                                    ?>
+                                    
+                                    <li class="<?php echo $class; ?>">
+                                        <a href="<?php echo base_url(); ?>applicants_login/dashboard">
+                                            <i class="fa fa-dashboard"></i>
+                                            <span>Dashboard</span>
+                                        </a>
+                                    </li>
+                                    
+                                    <?php 
+                                        if ($this->uri->segment(2) == "partnership_details_list" || $this->uri->segment(2) == "index_for_change_of_name_surname" || $this->uri->segment(2) == "add_change_of_name_surname" || $this->uri->segment(2) == "add_partnership_details" || $this->uri->segment(2) == "edit_partnership_details" || $this->uri->segment(2) == "edit_partnership_details") { 
+                                            $class = "active open";
+                                        } else {
+                                            $class = "";
+                                        }
+                                    ?>
+                                    
+                                    <li class="<?php echo $class; ?>">
+                                        <a role="button" tabindex="0">
+                                            <i class="fa fa-list <?php echo $class; ?>"></i>
+                                            <span>Apply Online</span>
+                                        </a>
+                                        <ul>
+                                            
+                                            <li class="<?php if($this->uri->segment(2) == "index_for_change_of_name_surname" || $this->uri->segment(2) == "add_change_of_name_surname" || $this->uri->segment(2) == 'view_details_name_surname'){ echo 'class: active'; }else{ echo ""; } ?>" >
+                                                
+                                                <a href="<?php echo base_url(); ?>applicants_login/add_change_of_name_surname"><i class="fa fa-angle-right"></i><span>Change of Name/Surname</span> </a>
+                                                
+                                            </li>
+                                            
+                                            <!-- <li class="<?php if($this->uri->segment(2) == "partnership_details_list" || $this->uri->segment(2) == "add_partnership_details" || $this->uri->segment(2) == "edit_partnership_details"){ echo 'class: active'; }else{ echo ""; } ?>" >
+
+                                                <a href="<?php echo base_url(); ?>applicants_login/add_partnership_details"><i class="fa fa-angle-right"></i><span>Change of Partnership</span></a>
+                                                
+                                            </li> -->
+                                            <?php //if ($this->session->userdata('user_id') == 966): ?>
+                                            <!-- <li class="<?php if($this->uri->segment(2) == "add_change_of_gender" || $this->uri->segment(2) == "edit_change_of_gender" || $this->uri->segment(2) == "view_change_of_gender") {echo 'class: active';} else { echo '';} ?>">
+
+                                                <a href="<?php echo base_url(); ?>applicants_login/add_change_of_gender"><i class="fa fa-angle-right"></i><span>Change of Gender</span></a>
+
+                                            </li> -->
+                                            <?php //endif; ?>
+                                            
+                                        </ul>
+                                    </li>
+                                    
+                                    <?php
+                                        if ($this->uri->segment(1) == 'make_payment') {
+                                            $class = "active open";
+                                        } else {
+                                            $class = '';
+                                        }
+                                    ?>
+                                    
+                                    <li class="<?php echo $class; ?>">
+                                        
+                                        <a role="button" tabindex="0">
+                                            <i class="fa fa-inr <?php echo $class; ?>"></i>
+                                            <span>Make Payment</span>
+                                        </a>
+                                        
+                                        <ul>
+                                            
+                                            <li class="<?php if ($this->uri->segment(2) == 'change_name' || $this->uri->segment(2) == 'make_payment_name_surname') { echo 'class: active'; } else { echo ''; } ?>">
+
+                                                <a href="<?php echo base_url(); ?>make_payment/change_name"><i class="fa fa-angle-right"></i><span>Change of Name/Surname</span> </a>
+
+                                            </li>
+
+                                            <!-- <li class="<?php if ($this->uri->segment(2) == 'change_gender' || $this->uri->segment(2) == 'make_payment_gender') { echo 'class: active'; } else { echo ''; } ?>">
+
+                                                <a href="<?php echo base_url(); ?>make_payment/change_gender"><i class="fa fa-angle-right"></i><span>Change of Gender</span> </a>
+
+                                            </li> -->
+
+                                            <!-- <li class="<?php if ($this->uri->segment(2) == 'change_partnership' || $this->uri->segment(2) == 'make_payment_partnership') { echo 'class: active'; } else { echo ''; } ?>">
+
+                                                <a href="<?php echo base_url(); ?>make_payment/change_partnership"><i class="fa fa-angle-right"></i><span>Change of Partnership</span></a>
+
+                                            </li> -->
+                                            
+                                        </ul>
+                                        
+                                    </li>
+                                    
+                                    
+                                    <?php
+                                        if ($this->uri->segment(1) == 'check_status') {
+                                            $class = "active open";
+                                        } else {
+                                            $class = '';
+                                        }
+                                    ?>
+                                    
+                                    <li class="<?php echo $class; ?>">
+                                        
+                                        <a role="button" tabindex="0">
+                                            <i class="fa fa-list <?php echo $class; ?>"></i>
+                                            <span>Check Status</span>
+                                        </a>
+                                        
+                                        <ul>
+                                            
+                                            <li class="<?php if ($this->uri->segment(2) == 'change_name_status' || $this->uri->segment(2) == 'change_name_status_details' || $this->uri->segment(2) == 'filter_change_name') { echo 'class: active'; } else { echo ''; } ?>">
+
+                                                <a href="<?php echo base_url(); ?>check_status/change_name_status"><i class="fa fa-angle-right"></i><span>Change of Name/Surname</span> </a>
+
+                                            </li>
+
+                                            <!-- <li class="<?php if ($this->uri->segment(2) == 'change_gender_status' || $this->uri->segment(2) == 'change_gender_status_details' || $this->uri->segment(2) == 'filter_gender_name') { echo 'class: active'; } else { echo ''; } ?>">
+
+                                                <a href="<?php echo base_url(); ?>check_status/change_gender_status"><i class="fa fa-angle-right"></i><span>Change of Gender</span> </a>
+
+                                            </li> -->
+
+                                            <!-- <li class="<?php if ($this->uri->segment(2) == 'change_partnership_status' || $this->uri->segment(2) == 'change_partnership_status_details' || $this->uri->segment(2) == 'filter_change_partnership') { echo 'class: active'; } else { echo ''; } ?>">
+
+                                                <a href="<?php echo base_url(); ?>check_status/change_partnership_status"><i class="fa fa-angle-right"></i><span>Change of Partnership</span></a>
+
+                                            </li> -->
+
+                                            <li class="<?php if ($this->uri->segment(2) == 'check_transaction_status'){ echo 'class: active'; } else { echo ''; } ?>">
+                                                <a href="<?php echo base_url(); ?>check_status/check_transaction_status"><i class="fa fa-angle-right"></i><span>Check Transaction Status</span></a>
+                                            </li>
+                                            
+                                        </ul>
+                                        
+                                    </li>
+                                    
+                                    <?php
+                                        if ($this->uri->segment(1) == 'published') {
+                                            $class = "active open";
+                                        } else {
+                                            $class = '';
+                                        }
+                                    ?>
+                                    
+                                    <li class="<?php echo $class; ?>">
+                                        
+                                        <a role="button" tabindex="0">
+                                            <i class="fa fa-file-pdf-o <?php echo $class; ?>"></i>
+                                            <span>Published Gazettes</span>
+                                        </a>
+                                        
+                                        <ul>
+                                            
+                                            <li class="<?php if ($this->uri->segment(2) == 'published_change_name') { echo 'class: active'; } else { echo ''; } ?>">
+
+                                                <a href="<?php echo base_url(); ?>published/published_change_name"><i class="fa fa-angle-right"></i><span>Change of Name/Surname</span> </a>
+
+                                            </li>
+
+                                            <!-- Gender Work -->
+                                            <!-- <li class="<?php if ($this->uri->segment(2) == 'published_change_gender') { echo 'class: active'; } else { echo ''; } ?>">
+
+                                            <a href="<?php echo base_url(); ?>published/published_change_gender"><i class="fa fa-angle-right"></i><span>Change of Gender</span> </a>
+
+                                            </li> -->
+                                            <!-- Gender Work -->
+
+                                            <!-- <li class="<?php if ($this->uri->segment(2) == 'published_change_partnership') { echo 'class: active'; } else { echo ''; } ?>">
+
+                                                <a href="<?php echo base_url(); ?>published/published_change_partnership"><i class="fa fa-angle-right"></i><span>Change of Partnership</span></a>
+
+                                            </li> -->
+                                            
+                                        </ul>
+                                        
+                                    </li>
+                                    
+                                </ul>
+                            
+                            <?php } ?>
+							
+							
+							<!--Offline Approver SIDEBAR-->                            
+                            
+                            
+                            <?php if ($this->session->userdata('is_offline_approver')) { ?>
+                                <ul id="navigation">
+                                    <?php 
+                                        if ($this->uri->segment(2) == "dashboard") { 
+                                            $class = "active open";
+                                        } else {
+                                            $class = "";
+                                        }
+                                    ?>
+                                    <li class="<?php echo $class; ?>">
+                                        <a href="<?php echo base_url(); ?>applicants_login/dashboard">
+                                            <i class="fa fa-dashboard"></i>
+                                            <span>Dashboard</span>
+                                        </a>
+                                    </li>
+                                    <?php 
+                                        if ($this->uri->segment(2) == "offline_payment_list") { 
+                                            $class = "active open";
+                                        } else if ($this->uri->segment(2) == "partnership_offline_payment_list") { 
+                                            $class = "active open";
+                                        } else {
+                                            $class = "";
+                                        }
+                                    ?>
+                                    <li class="<?php echo $class; ?>">
+                                        <a role="button" tabindex="0">
+                                            <i class="fa fa-list"></i>
+                                            <span>Online Services</span>
+                                        </a>
+                                        <ul>
+                                            <li class="<?php if($this->uri->segment(2) == "offline_payment_list" || $this->uri->segment(2) == "offline_payment_list"){ echo 'class: active'; }else{ echo ""; } ?>" >
+                                                <a href="<?php echo base_url(); ?>offline_payment_users/offline_payment_list"><i class="fa fa-angle-right"></i><span>Applicants Offline Payments</span></a>
+
+                                            </li>
+
+                                            <li class="<?php if($this->uri->segment(2) == "partnership_offline_payment_list" || $this->uri->segment(2) == "partnership_offline_payment_list"){ echo 'class: active'; }else{ echo ""; } ?>" >
+                                                <a href="<?php echo base_url(); ?>offline_payment_users/partnership_offline_payment_list"><i class="fa fa-angle-right"></i><span>Partnership Offline Payments</span></a>
+
+                                            </li>
+
+                                            <li class="<?php if($this->uri->segment(2) == "departmental_offline_payment_list" || $this->uri->segment(2) == "departmental_offline_payment_list"){ echo 'class: active'; }else{ echo ""; } ?>" >
+                                                <a href="<?php echo base_url(); ?>offline_payment_users/departmental_offline_payment_list"><i class="fa fa-angle-right"></i><span>Extraordinary Offline Payments</span></a>
+
+                                            </li>
+                                            
+                                        </ul>
+                                    </li>
+                                </ul>
+                            <?php } ?>
+                            
+                            
+                            <!--IGR USER SIDEBAR-->                            
+                            
+                            
+                            <?php if ($this->session->userdata('is_igr')) { ?>
+                                <ul id="navigation">
+                                    <?php 
+                                        if ($this->uri->segment(2) == "dashboard") { 
+                                            $class = "active open";
+                                        } else {
+                                            $class = "";
+                                        }
+                                    ?>
+                                    <li class="<?php echo $class; ?>">
+                                        <a href="<?php echo base_url(); ?>applicants_login/dashboard">
+                                            <i class="fa fa-dashboard"></i>
+                                            <span>Dashboard</span>
+                                        </a>
+                                    </li>
+                                    <?php 
+                                        if ($this->uri->segment(2) == "partnership_details_list") { 
+                                            $class = "active open";
+                                        } else {
+                                            $class = "";
+                                        }
+                                    ?>
+                                    <li class="<?php echo $class; ?>">
+                                        <a role="button" tabindex="0">
+                                            <i class="fa fa-list"></i>
+                                            <span>Online Services</span>
+                                        </a>
+                                        <ul>
+                                            <li class="<?php if($this->uri->segment(2) == "partnership_details_list" || $this->uri->segment(2) == "add_partnership_details"){ echo 'class: active'; }else{ echo ""; } ?>" >
+                                                <a href="<?php echo base_url(); ?>applicants_login/partnership_details_list"><i class="fa fa-angle-right"></i><span>Change of Partnership</span></a>
+
+                                            </li>
+                                            
+                                        </ul>
+                                    </li>
+                                </ul>
+                            <?php } ?>
+                            
+                            
+                            <!--C & T USER SIDEBAR-->
+                            
+                            
+                            <?php if ($this->session->userdata('is_c&t')) { ?>
+                                <ul id="navigation">
+                                    <?php 
+                                        if ($this->uri->segment(2) == "dashboard") { 
+                                            $class = "active open";
+                                        } else {
+                                            $class = "";
+                                        }
+                                    ?>
+                                    <li class="<?php echo $class; ?>">
+                                        <a href="<?php echo base_url(); ?>applicants_login/dashboard">
+                                            <i class="fa fa-dashboard"></i>
+                                            <span>Dashboard</span>
+                                        </a>
+                                    </li>
+                                    
+                                    
+                                    <!--EXTRAORDINARY GAZETTE-->
+                                    
+                                    
+                                    <?php 
+                                        if($this->uri->segment(1) == "extraordinary_poc" || $this->uri->segment(2) == "view" || $this->uri->segment(2) == "verifier_index" || $this->uri->segment(2) == "approver_index") { 
+                                            $class = "active open";
+                                        } else {
+                                            $class = "";
+                                        }
+                                    ?>
+                                    <li class="<?php echo $class; ?>">
+                                        <a role="button" tabindex="0">
+                                            <i class="fa fa-list"></i>
+                                            <span>Payment of Cost</span>
+                                        </a>
+                                        <ul>
+                                            <li class="<?php if($this->uri->segment(2) == "processor_index" || $this->uri->segment(2) == "view" || $this->uri->segment(2) == "verifier_index" || $this->uri->segment(2) == "approver_index"){ echo 'class: active'; } else { echo ""; } ?>" >
+                                                <?php if ($this->session->userdata('is_verifier_approver') == 'Processor') { ?>
+                                                    <a href="<?php echo base_url(); ?>extraordinary_poc/processor_index"> <i class="fa fa-angle-right"></i><span>Extraordinary Gazette</span>  </a>
+                                                
+                                                <?php } else if ($this->session->userdata('is_verifier_approver') == 'Verifier') { ?>
+                                                    <a href="<?php echo base_url(); ?>extraordinary_poc/verifier_index"> <i class="fa fa-angle-right"></i><span>Extraordinary Gazette</span>  </a>
+                                                <?php } else if ($this->session->userdata('is_verifier_approver') == 'Approver') { ?>
+                                                    <a href="<?php echo base_url(); ?>extraordinary_poc/approver_index"> <i class="fa fa-angle-right"></i><span>Extraordinary Gazette</span>  </a>
+                                                <?php } ?>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    
+                                    
+                                    <!--CHANGE OF PARTNERSHIP & CHANGE OF NAME/SURNAME-->
+                                    
+                                    
+                                    <?php 
+                                        if($this->uri->segment(2) == "partnership_details_list" || $this->uri->segment(2) == "index_for_change_of_name_surname" || $this->uri->segment(2) == 'view_details_name_surname') { 
+                                            $class = "active open";
+                                        } else {
+                                            $class = "";
+                                        }
+                                    ?>
+                                    
+                                    <li class="<?php echo $class; ?>">
+                                        
+                                        <a role="button" tabindex="0">
+                                            <i class="fa fa-list"></i>
+                                            <span>Online Services</span>
+                                        </a>
+                                        
+                                        <ul>
+                                            <?php if ($this->session->userdata('is_c&t_module') == 1) { ?>
+                                            
+                                                <li class="<?php if($this->uri->segment(2) == "partnership_details_list" || $this->uri->segment(2) == "add_partnership_details"){ echo 'class: active'; }else{ echo ""; } ?>" >
+                                                <a href="<?php echo base_url(); ?>applicants_login/partnership_details_list"><i class="fa fa-angle-right"></i> <span>Change of Partnership</span>  </a>
+
+                                                <li class="<?php if($this->uri->segment(2) == "published_partnership" || $this->uri->segment(2) == "add_partnership_details"){ echo 'class: active'; }else{ echo ""; } ?>" >
+                                                    <a href="<?php echo base_url(); ?>applicants_login/published_partnership"><i class="fa fa-angle-right"></i><span>Published Partnership</span></a>
+                                                </li>
+
+                                                <li class="<?php if($this->uri->segment(2) == "index_for_change_of_name_surname" || $this->uri->segment(2) == "view_details_name_surname"){ echo 'class: active'; }else{ echo ""; } ?>" >
+                                                    <a href="<?php echo base_url(); ?>applicants_login/index_for_change_of_name_surname"><i class="fa fa-angle-right"></i><span>Change of Name/Surname</span></a>
+                                                </li>
+
+                                                <li class="<?php if($this->uri->segment(2) == "published_name_surname" || $this->uri->segment(2) == "view_details_name_surname"){ echo 'class: active'; }else{ echo ""; } ?>" >
+                                                    <a href="<?php echo base_url(); ?>applicants_login/published_name_surname"><i class="fa fa-angle-right"></i><span>Published Name/Surname</span></a>
+                                                </li>
+                                                <!-- gender start -->
+                                                <li class="<?php if($this->uri->segment(2) == "index_for_change_of_gender" || $this->uri->segment(2) == "view_details_change_of_gender" || $this->uri->segment(2) == "search_for_change_of_gender"){ echo 'class: active'; }else{ echo ""; } ?>" >
+                                                    <a href="<?php echo base_url(); ?>applicants_login/index_for_change_of_gender"><i class="fa fa-angle-right"></i><span>Change of Gender</span></a>
+                                                </li>
+
+                                                <!-- published part is pending..... -->
+                                                <li class="<?php if($this->uri->segment(2) == "published_gender"){ echo 'class: active'; }else{ echo ""; } ?>" >
+                                                    <a href="<?php echo base_url(); ?>applicants_login/published_gender"><i class="fa fa-angle-right"></i><span>Published Gender</span></a>
+                                                </li>
+                                                <!-- gender end -->
+                                            <?php } else if ($this->session->userdata('is_c&t_module') == 2) { ?>
+                                                
+                                                <li class="<?php if($this->uri->segment(2) == "index_for_change_of_name_surname" || $this->uri->segment(2) == "view_details_name_surname"){ echo 'class: active'; }else{ echo ""; } ?>" >
+                                                    <a href="<?php echo base_url(); ?>applicants_login/index_for_change_of_name_surname"><i class="fa fa-angle-right"></i><span>Change of Name/Surname</span></a>
+                                                </li>
+
+                                                <li class="<?php if($this->uri->segment(2) == "published_name_surname" || $this->uri->segment(2) == "view_details_name_surname"){ echo 'class: active'; }else{ echo ""; } ?>" >
+                                                    <a href="<?php echo base_url(); ?>applicants_login/published_name_surname"><i class="fa fa-angle-right"></i><span>Published Name/Surname</span></a>
+                                                </li>
+                                                <li class="<?php if($this->uri->segment(2) == "partnership_details_list" || $this->uri->segment(2) == "add_partnership_details"){ echo 'class: active'; }else{ echo ""; } ?>" >
+                                                    <a href="<?php echo base_url(); ?>applicants_login/partnership_details_list"><i class="fa fa-angle-right"></i> <span>Change of Partnership</span>  </a>
+                                                </li>
+                                                
+                                                <li class="<?php if($this->uri->segment(2) == "published_partnership" || $this->uri->segment(2) == "edit_partnership_details"){ echo 'class: active'; }else{ echo ""; } ?>" >
+                                                    <a href="<?php echo base_url(); ?>applicants_login/published_partnership"><i class="fa fa-angle-right"></i> <span>Published Partnership</span>  </a>
+                                                </li>
+                                                <!-- gender start -->
+                                                <li class="<?php if($this->uri->segment(2) == "index_for_change_of_gender" || $this->uri->segment(2) == "view_details_change_of_gender" || $this->uri->segment(2) == "search_for_change_of_gender"){ echo 'class: active'; }else{ echo ""; } ?>" >
+                                                    <a href="<?php echo base_url(); ?>applicants_login/index_for_change_of_gender"><i class="fa fa-angle-right"></i><span>Change of Gender</span></a>
+                                                </li>
+
+                                                <!-- published part is pending..... -->
+                                                <li class="<?php if($this->uri->segment(2) == "published_gender"){ echo 'class: active'; }else{ echo ""; } ?>" >
+                                                    <a href="<?php echo base_url(); ?>applicants_login/published_gender"><i class="fa fa-angle-right"></i><span>Published Gender</span></a>
+                                                </li>
+                                                <!-- gender end -->
+                                            <?php } else if ($this->session->userdata('is_c&t_module') == 6) { ?>
+
+                                                <!-- 
+                                                    - I left from here 
+                                                    - I need to create new files for gender in c&t module to show them....
+                                                    - start from here, the below list code in this block is just a copy need to modify this....
+                                                -->
+                                                <!-- gender start -->
+                                                <li class="<?php if($this->uri->segment(2) == "index_for_change_of_gender" || $this->uri->segment(2) == "view_details_change_of_gender" || $this->uri->segment(2) == "search_for_change_of_gender"){ echo 'class: active'; }else{ echo ""; } ?>" >
+                                                    <a href="<?php echo base_url(); ?>applicants_login/index_for_change_of_gender"><i class="fa fa-angle-right"></i><span>Change of Gender</span></a>
+                                                </li>
+
+                                                <!-- published part is pending..... -->
+                                                <li class="<?php if($this->uri->segment(2) == "published_gender"){ echo 'class: active'; }else{ echo ""; } ?>" >
+                                                    <a href="<?php echo base_url(); ?>applicants_login/published_gender"><i class="fa fa-angle-right"></i><span>Published Gender</span></a>
+                                                </li>
+                                                <!-- gender end -->
+                                                <li class="<?php if($this->uri->segment(2) == "index_for_change_of_name_surname" || $this->uri->segment(2) == "view_details_name_surname"){ echo 'class: active'; }else{ echo ""; } ?>" >
+                                                    <a href="<?php echo base_url(); ?>applicants_login/index_for_change_of_name_surname"><i class="fa fa-angle-right"></i><span>Change of Name/Surname</span></a>
+                                                </li>
+
+                                                <li class="<?php if($this->uri->segment(2) == "published_name_surname" || $this->uri->segment(2) == "view_details_name_surname"){ echo 'class: active'; }else{ echo ""; } ?>" >
+                                                    <a href="<?php echo base_url(); ?>applicants_login/published_name_surname"><i class="fa fa-angle-right"></i><span>Published Name/Surname</span></a>
+                                                </li>
+                                                <li class="<?php if($this->uri->segment(2) == "partnership_details_list" || $this->uri->segment(2) == "add_partnership_details"){ echo 'class: active'; }else{ echo ""; } ?>" >
+                                                <a href="<?php echo base_url(); ?>applicants_login/partnership_details_list"><i class="fa fa-angle-right"></i> <span>Change of Partnership</span>  </a>
+                                                
+                                                <li class="<?php if($this->uri->segment(2) == "published_partnership" || $this->uri->segment(2) == "edit_partnership_details"){ echo 'class: active'; }else{ echo ""; } ?>" >
+                                                <a href="<?php echo base_url(); ?>applicants_login/published_partnership"><i class="fa fa-angle-right"></i> <span>Published Partnership</span>  </a>
+                                            <?php } ?>
+                                        </ul>
+                                    </li>
+                                    
+                                </ul>
+                            <?php } ?>
+                            
+                            
+                            
+                            <!--  /NAVIGATION Content -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+</div>

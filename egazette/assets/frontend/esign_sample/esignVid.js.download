@@ -1,0 +1,95 @@
+$(document).ready(function() {
+    
+     $('#loading-indicator').hide();
+     $('#loading-indicator-text').hide();
+     //$('#OTPId').attr("disabled", "disabled");
+     $('#chkId').hide();
+    $('[data-toggle="tooltip"]').tooltip();
+    
+     $('#OTPId').val('');
+    
+    var OTPSubFlag = true;
+    
+    var alertTimerId = true;
+    
+    var otpHits = $('#hitc').val();
+    var otpHit= otpHits;
+    var otpReuseHits = $('#reusec').val();
+    
+     $("#rsOtp").attr('title','You have '+otpHit+' attempt(s) left to regenerate OTP');
+    $('button,a').focus(function(){
+        $(this).blur();
+    });
+    
+    $('#OTPId').keyup(function() {
+         $("#msg").html('');
+    });
+    
+    $('#chk').change(function(){
+        if(this.checked)
+            $("#msg").html('');
+
+    });    
+    
+    setTimeout (function () {
+          alertTimerId=true;
+   }, 40000 );
+
+   // $("#msg").html('Invalid OTP. Please enter correct OTP / Regenerate OTP ('+otpHit+' attempts left).');
+    $(document).on('click','#OTPSubmit', function(){
+        
+         $('#OTPId').css('border-color', '');
+         $("#msg").html('');
+         $('#infoId').html('');
+        var otpVal = $("#OTPId").val();
+        var vidId  = $("#VidId").val();
+        var otpRegex = new RegExp('^[0-9]{6}$');
+        var flag = otpRegex.test(otpVal);
+        var vidRegex = new RegExp('^[0-9]{16}$');
+        var vidFlag = vidRegex.test(vidId);
+        if(vidId==''){            
+            $("#msg").html('Please\x20enter\x20your\x20Virtual\x20ID');    
+            $('#VidId').css('border-color', '#B22222');
+        }else if(!vidFlag){                    
+            $("#msg").html('Please\x20enter\x20a\x20valid\x20Virtual\x20ID');
+            $('#VidId').css('border-color', '#B22222');
+            $('#VidId').val('');
+       }else if(otpVal==''){            
+            $("#msg").html('Please\x20enter\x20a\x206\x20digit\x20valid\x20OTP');    
+            $('#OTPId').css('border-color', '#B22222');
+        }else if(!flag){                    
+            $("#msg").html('Please\x20enter\x20a\x206\x20digit\x20valid\x20OTP');
+             $('#OTPId').css('border-color', '#B22222');
+             $('#OTPId').val('');
+        }else if(!$('#chk').is(':checked')){                    
+            $("#msg").html('Please\x20read\x20and\x20provide\x20the\x20consent');
+             $('#OTPId').css('border-color', '');
+        }
+        
+        else{            
+             $('#loading-indicator').show();
+             $('#loading-indicator-text').show();                
+             //$('#OTPSubmit').attr("disabled", "disabled");
+             //$('#viewInfoId').attr("disabled", "disabled");        
+             $('#resOtpDiv').hide();
+             //$('#cancelId').attr("disabled", "disabled");
+             otpReuseHits = otpReuseHits - 1;
+            // Encrypt with the public key...
+              var encrypt = new JSEncrypt(
+                {default_key_size:2048}      
+              );
+              encrypt.setPublicKey($('#pubkey').val());
+              var encryptedOtp = encrypt.encrypt(otpVal);
+            
+            
+            var uidVal = $("#UidId").val();
+                        
+            var UidInfo = {
+                "uid" : uidVal,
+                "authInformation" : encryptedOtp                
+            };
+            
+        }
+    });
+    
+});
